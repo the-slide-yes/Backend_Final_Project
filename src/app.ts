@@ -6,6 +6,7 @@ dotenv.config();
 
 // internal imports
 import healthCheckRoutes from "./api/v1/routes/healthCheckRoutes";
+import wordRoutes from "./api/v1/routes/wordRoutes";
 
 // initialize the app
 const app: Express = express();
@@ -20,6 +21,7 @@ app.get("/", (_req: Request, res: Response): void => {
 
 // Routers here
 app.use("/api/v1/health", healthCheckRoutes);
+app.use("/api/v1/words", wordRoutes);
 
 // Error handler here
 
