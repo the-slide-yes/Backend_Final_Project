@@ -43,14 +43,20 @@ export const getWordById = async (id: string): Promise<Word> => {
  * @param wordData - Only the fields needed to create a word.
  * @returns The created word.
  */
-export const createWord = async (wordData: Omit<Word, "id">): Promise<Word> => {
+export const createWord = async (wordData: {
+    name: string,
+    description?: string,
+    tagId?: string[],
+    userId: string
+}): Promise<Word> => {
     const placeholderWord: Word = {
-        name: "test",
-        visibility: "private",
         id: "2",
+        visibility: "private",
+        name: wordData.name,
+        tagIds: wordData.tagId,
+        userId: wordData.userId,
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: "fred",
     };
 
     return placeholderWord;
@@ -65,13 +71,15 @@ export const createWord = async (wordData: Omit<Word, "id">): Promise<Word> => {
  */
 export const updateWord = async (id: string, wordData: {
     name?: string;
-    address?: string;
-    phone?: string;
+    description?: string;
+    tagIds?: string[];
 }): Promise<Word> => {
     const placeholderWord: Word = {
-        name: "test",
+        name: wordData.name || "terry",
+        description: wordData.description || "not jerry",
         visibility: "private",
         id: "2",
+        tagIds: wordData.tagIds,
         createdAt: new Date(),
         updatedAt: new Date(),
         userId: "fred",
