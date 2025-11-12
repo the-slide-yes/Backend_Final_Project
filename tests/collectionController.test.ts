@@ -93,11 +93,8 @@ describe("Collection Controller", ()=>{
         it("should handle successful operation", async () => {
             // Arrange
             const mockId: string = "Mock ID";
-            const mockDeletionMessage: string = "Mock Deletion Message";
 
             mockReq.params = { id: mockId };
-
-            (collectionService.deleteCollection as jest.Mock).mockReturnValue(mockDeletionMessage);
 
             // Act
             await collectionController.deleteCollection(
@@ -111,7 +108,7 @@ describe("Collection Controller", ()=>{
             expect(mockRes.json).toHaveBeenCalledWith({
                 message: "Collection deleted successfully.",
                 status: "success",
-                data: mockDeletionMessage,
+                data: null,
             });
         });
     });

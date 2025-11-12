@@ -93,11 +93,8 @@ describe("Word Controller", ()=>{
         it("should handle successful operation", async () => {
             // Arrange
             const mockId: string = "Mock ID";
-            const mockDeletionMessage: string = "Mock Deletion Message";
 
             mockReq.params = { id: mockId };
-
-            (wordService.deleteWord as jest.Mock).mockReturnValue(mockDeletionMessage);
 
             // Act
             await wordController.deleteWord(
@@ -111,7 +108,7 @@ describe("Word Controller", ()=>{
             expect(mockRes.json).toHaveBeenCalledWith({
                 message: "Word deleted successfully.",
                 status: "success",
-                data: mockDeletionMessage,
+                data: null,
             });
         });
     });
