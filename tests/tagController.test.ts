@@ -93,11 +93,8 @@ describe("Tag Controller", ()=>{
         it("should handle successful operation", async () => {
             // Arrange
             const mockId: string = "Mock ID";
-            const mockDeletionMessage: string = "Mock Deletion Message";
 
             mockReq.params = { id: mockId };
-
-            (tagService.deleteTag as jest.Mock).mockReturnValue(mockDeletionMessage);
 
             // Act
             await tagController.deleteTag(
@@ -111,7 +108,7 @@ describe("Tag Controller", ()=>{
             expect(mockRes.json).toHaveBeenCalledWith({
                 message: "Tag deleted successfully.",
                 status: "success",
-                data: mockDeletionMessage,
+                data: null,
             });
         });
     });

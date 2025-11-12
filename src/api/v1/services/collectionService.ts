@@ -1,22 +1,40 @@
+import { 
+    QuerySnapshot,
+    DocumentData,
+    DocumentSnapshot,
+} from "firebase-admin/firestore";
 import { Collection } from "../models/collectionModel";
+import {
+    createDocument,
+    getDocuments,
+    getDocumentById,
+    updateDocument,
+    deleteDocument,
+} from "../repositories/firestoreRepository";
+
+const COLLECTION: string = "collections";
 
 /**
  * Gets all collections.
  * @returns An array containing all collections.
  */
 export const getAllCollections = async (): Promise<Collection[]> => {
-    const placeholderCollection: Collection = {
-        name: "test",
-        visibility: "private",
-        id: "2",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: "fred",
-    };
+    try {
+        const snapshot: QuerySnapshot = await getDocuments(COLLECTION);
+        const collections: Collection[] = snapshot.docs.map((doc) => {
+            const data: DocumentData = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                createdAt: data.createdAt.toDate(),
+                updatedAt: data.updatedAt.toDate(),
+            } as Collection;
+        });
 
-    return [
-        placeholderCollection
-    ];
+        return collections;
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -26,16 +44,21 @@ export const getAllCollections = async (): Promise<Collection[]> => {
  * @throws Error if a collection with the given ID is not found.
  */
 export const getCollectionById = async (id: string): Promise<Collection> => {
-    const placeholderCollection: Collection = {
-        name: "test",
-        visibility: "private",
-        id: "2",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: "fred",
-    };
+    const doc: DocumentSnapshot | null = await getDocumentById(COLLECTION, id);
 
-    return placeholderCollection;
+    if(!doc) {
+        throw new Error(`Collection with ID ${id} not found`);
+    }
+
+    const data: DocumentData | undefined = doc.data();
+    const collection: Collection = {
+        id: doc.id,
+        ...data,
+        createdAt: data?.createdAt.toDate(),
+        updatedAt: data?.updatedAt.toDate(),
+    } as Collection;
+
+    return structuredClone(collection);
 };
 
 /**
@@ -46,20 +69,23 @@ export const getCollectionById = async (id: string): Promise<Collection> => {
 export const createCollection = async (collectionData: {
     name: string,
     description?: string,
-    wordIds?: string[],
+    wordId?: string[],
     userId: string
 }): Promise<Collection> => {
-    const placeholderCollection: Collection = {
-        id: "2",
-        visibility: "private",
-        name: collectionData.name,
-        wordIds: collectionData.wordIds,
-        userId: collectionData.userId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+    const today: Date = new Date();
+
+    const newCollection: Partial<Collection> = {
+        ...collectionData,
+        createdAt: today,
+        updatedAt: today,
     };
 
-    return placeholderCollection;
+    const collectionId: string = await createDocument<Collection>(COLLECTION, newCollection);
+
+    return structuredClone({
+        id: collectionId,
+        ...newCollection,
+    } as Collection);
 };
 
 /**
@@ -74,26 +100,26 @@ export const updateCollection = async (id: string, collectionData: {
     description?: string;
     wordIds?: string[];
 }): Promise<Collection> => {
-    const placeholderCollection: Collection = {
-        name: collectionData.name || "terry",
-        description: collectionData.description || "not jerry",
-        visibility: "private",
-        id: "2",
-        wordIds: collectionData.wordIds,
-        createdAt: new Date(),
+    const collection: Collection = await getCollectionById(id);
+
+    const updateCollection: Collection = {
+        ...collection,
+        ...collectionData,
         updatedAt: new Date(),
-        userId: "fred",
     };
 
-    return placeholderCollection;
+    await updateDocument<Collection>(COLLECTION, id, updateCollection);
+
+    return structuredClone(updateCollection);
 };
 
 /**
  * Removes a collection.
  * @param id The ID of the collection intended to be removed.
- * @returns A message confirming the collection was successfully deleted.
  * @throws Error if a collection with the given ID is not found.
  */
-export const deleteCollection = async (id: string): Promise<string> => {
-    return "It has been done."
+export const deleteCollection = async (id: string): Promise<void> => {
+    await getCollectionById(id);
+
+    await deleteDocument(COLLECTION, id);
 };

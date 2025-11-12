@@ -1,22 +1,40 @@
+import { 
+    QuerySnapshot,
+    DocumentData,
+    DocumentSnapshot,
+} from "firebase-admin/firestore";
 import { Word } from "../models/wordModel";
+import {
+    createDocument,
+    getDocuments,
+    getDocumentById,
+    updateDocument,
+    deleteDocument,
+} from "../repositories/firestoreRepository";
+
+const COLLECTION: string = "words";
 
 /**
  * Gets all words.
  * @returns An array containing all words.
  */
 export const getAllWords = async (): Promise<Word[]> => {
-    const placeholderWord: Word = {
-        name: "test",
-        visibility: "private",
-        id: "2",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: "fred",
-    };
+    try {
+        const snapshot: QuerySnapshot = await getDocuments(COLLECTION);
+        const words: Word[] = snapshot.docs.map((doc) => {
+            const data: DocumentData = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                createdAt: data.createdAt.toDate(),
+                updatedAt: data.updatedAt.toDate(),
+            } as Word;
+        });
 
-    return [
-        placeholderWord
-    ];
+        return words;
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -26,16 +44,21 @@ export const getAllWords = async (): Promise<Word[]> => {
  * @throws Error if a word with the given ID is not found.
  */
 export const getWordById = async (id: string): Promise<Word> => {
-    const placeholderWord: Word = {
-        name: "test",
-        visibility: "private",
-        id: "2",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: "fred",
-    };
+    const doc: DocumentSnapshot | null = await getDocumentById(COLLECTION, id);
 
-    return placeholderWord;
+    if(!doc) {
+        throw new Error(`Word with ID ${id} not found`);
+    }
+
+    const data: DocumentData | undefined = doc.data();
+    const word: Word = {
+        id: doc.id,
+        ...data,
+        createdAt: data?.createdAt.toDate(),
+        updatedAt: data?.updatedAt.toDate(),
+    } as Word;
+
+    return structuredClone(word);
 };
 
 /**
@@ -49,17 +72,20 @@ export const createWord = async (wordData: {
     tagId?: string[],
     userId: string
 }): Promise<Word> => {
-    const placeholderWord: Word = {
-        id: "2",
-        visibility: "private",
-        name: wordData.name,
-        tagIds: wordData.tagId,
-        userId: wordData.userId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+    const today: Date = new Date();
+
+    const newWord: Partial<Word> = {
+        ...wordData,
+        createdAt: today,
+        updatedAt: today,
     };
 
-    return placeholderWord;
+    const wordId: string = await createDocument<Word>(COLLECTION, newWord);
+
+    return structuredClone({
+        id: wordId,
+        ...newWord,
+    } as Word);
 };
 
 /**
@@ -74,26 +100,26 @@ export const updateWord = async (id: string, wordData: {
     description?: string;
     tagIds?: string[];
 }): Promise<Word> => {
-    const placeholderWord: Word = {
-        name: wordData.name || "terry",
-        description: wordData.description || "not jerry",
-        visibility: "private",
-        id: "2",
-        tagIds: wordData.tagIds,
-        createdAt: new Date(),
+    const word: Word = await getWordById(id);
+
+    const updateWord: Word = {
+        ...word,
+        ...wordData,
         updatedAt: new Date(),
-        userId: "fred",
     };
 
-    return placeholderWord;
+    await updateDocument<Word>(COLLECTION, id, updateWord);
+
+    return structuredClone(updateWord);
 };
 
 /**
  * Removes a word.
  * @param id The ID of the word intended to be removed.
- * @returns A message confirming the word was successfully deleted.
  * @throws Error if a word with the given ID is not found.
  */
-export const deleteWord = async (id: string): Promise<string> => {
-    return "It has been done."
+export const deleteWord = async (id: string): Promise<void> => {
+    await getWordById(id);
+
+    await deleteDocument(COLLECTION, id);
 };

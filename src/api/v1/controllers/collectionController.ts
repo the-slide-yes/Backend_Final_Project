@@ -135,11 +135,11 @@ export const deleteCollection: (
         const id: string = req.params.id;
 
         // Delete the Collection
-        const deletionResponse: string = await collectionService.deleteCollection(id);
+        await collectionService.deleteCollection(id);
 
-        // Respond with a success response containing the deletion message. 
+        // Respond with a success response
         res.status(HTTP_STATUS.OK).json(
-            successResponse(deletionResponse, "Collection deleted successfully.")
+            successResponse(null, "Collection deleted successfully.")
         );
     } catch (error: unknown) {
         next(error);

@@ -135,11 +135,11 @@ export const deleteWord: (
         const id: string = req.params.id;
 
         // Delete the Word
-        const deletionResponse: string = await wordService.deleteWord(id);
+        await wordService.deleteWord(id);
 
-        // Respond with a success response containing the deletion message. 
+        // Respond with a success response
         res.status(HTTP_STATUS.OK).json(
-            successResponse(deletionResponse, "Word deleted successfully.")
+            successResponse(null, "Word deleted successfully.")
         );
     } catch (error: unknown) {
         next(error);

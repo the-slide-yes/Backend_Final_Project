@@ -133,11 +133,11 @@ export const deleteTag: (
         const id: string = req.params.id;
 
         // Delete the Tag
-        const deletionResponse: string = await tagService.deleteTag(id);
+        await tagService.deleteTag(id);
 
-        // Respond with a success response containing the deletion message. 
+        // Respond with a success response
         res.status(HTTP_STATUS.OK).json(
-            successResponse(deletionResponse, "Tag deleted successfully.")
+            successResponse(null, "Tag deleted successfully.")
         );
     } catch (error: unknown) {
         next(error);
