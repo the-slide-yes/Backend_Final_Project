@@ -23,7 +23,7 @@ interface ValidationOptions {
  */
 export const validateRequest: (
     schemas: RequestSchema,
-    options: ValidationOptions,
+    options?: ValidationOptions,
 ) => MiddlewareFunction = (
     schemas: RequestSchema,
     options: ValidationOptions = {}
