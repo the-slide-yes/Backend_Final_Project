@@ -47,7 +47,7 @@ describe("Word Controller", ()=>{
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Words retrieved successfully",
+                message: "Words retrieved successfully.",
                 status: "success",
                 data: mockWords,
             });
@@ -78,7 +78,7 @@ describe("Word Controller", ()=>{
             // Assert
             expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.OK);
             expect(mockRes.json).toHaveBeenCalledWith({
-                message: "Words retrieved successfully",
+                message: "Word retrieved successfully.",
                 status: "success",
                 data: mockWord,
             });
