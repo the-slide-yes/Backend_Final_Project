@@ -3,7 +3,7 @@ import { Visibility } from "./visibility";
 /**
  * Represents a collection of words
  */
-export interface Word {
+export interface Collection {
     id: string;
     name: string;
     description?: string;
