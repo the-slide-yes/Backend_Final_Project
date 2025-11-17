@@ -1,7 +1,10 @@
-import swaggerJsdoc from "swagger-jsdoc";
+import swaggerJsdoc, { Options } from "swagger-jsdoc";
 
-const swaggerOptions: swaggerJsdoc.Options = {
-    definitions: {
+const serverUrl: string =
+    process.env.SWAGGER_SERVER_URL || "http://localhost:3000/api/v1";
+
+const swaggerOptions: Options = {
+    definition: {
         openapi: "3.0.0",
         info: {
             title: "Word Collection API Documentation",
@@ -10,7 +13,7 @@ const swaggerOptions: swaggerJsdoc.Options = {
         },
         servers: [
             {
-                url: "http://localhost:3000/api/v1",
+                url: serverUrl,
                 description: "Local server",
             },
         ],
@@ -29,9 +32,9 @@ const swaggerOptions: swaggerJsdoc.Options = {
             },
         ],
     },
-    apis: ["./src/api/v1/routes/*.ts", "./src/api/v1/validations/*.ts"],
+    apis: ["./src/api/v1/routes/*.ts", "./src/api/v1/validation/*.ts"],
 };
 
-export const generateSwaggerSpec: () => object = (): object => {
+export const generateSwaggerSpec: () => Options = (): Options => {
     return swaggerJsdoc(swaggerOptions);
 };

@@ -1,0 +1,996 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Word Collection API Documentation",
+    "version": "1.0.0",
+    "description": "This is the API documentation for the Word Collection application."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Collection": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "userId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the collection",
+            "example": "531HFDGS5237976"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the collection",
+            "example": "Xander's Favorite Games"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the collection",
+            "example": "My favorite games"
+          },
+          "wordIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The IDs of the words for this collection",
+            "example": [
+              "WORD1415",
+              "WORD7423",
+              "WORD7542"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this collection was created",
+            "example": "2024-01-20T14:45:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this collection was last updated",
+            "example": "2024-01-20T14:45:00Z"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user which created this collection",
+            "example": "USER531736"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "private",
+              "public",
+              "pending_publication",
+              "pending_deletion"
+            ],
+            "description": "Describes who is allowed to view this collection",
+            "example": "private"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "userId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the tag",
+            "example": "531HFDGS5237976"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the tag",
+            "example": "Video Game"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the tag",
+            "example": "A game playable on a computer, console, mobile device, or other digital system."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this tag was created",
+            "example": "2024-01-20T14:45:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this tag was last updated",
+            "example": "2024-01-20T14:45:00Z"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user which created this tag",
+            "example": "USER531736"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "private",
+              "public",
+              "pending_publication",
+              "pending_deletion"
+            ],
+            "description": "Describes who is allowed to view this tag",
+            "example": "private"
+          }
+        }
+      },
+      "Word": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "userId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the word",
+            "example": "531HFDGS5237976"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the word",
+            "example": "Rain World"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the word",
+            "example": "A difficult 2D platformer game."
+          },
+          "tagIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The IDs of the tags for this word",
+            "example": [
+              "TAG1415",
+              "TAG7423",
+              "TAG7542"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this word was created",
+            "example": "2024-01-20T14:45:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this word was last updated",
+            "example": "2024-01-20T14:45:00Z"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user which created this word",
+            "example": "USER531736"
+          },
+          "historicalId": {
+            "type": "string",
+            "description": "The ID of the previous version of this word (in the case this word is pending changes or publication)",
+            "example": "WORD622624"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "private",
+              "public",
+              "pending_publication",
+              "pending_deletion"
+            ],
+            "description": "Describes who is allowed to view this word",
+            "example": "private"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error type or code",
+            "example": "VALIDATION_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message",
+            "example": "The name field is required"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "name"
+                },
+                "issue": {
+                  "type": "string",
+                  "example": "must exist"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/collections": {
+      "get": {
+        "summary": "Retrieves a list of collections",
+        "tags": [
+          "Collections"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of Collections",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Collection"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Retrieves one collection with the apecified ID",
+        "tags": [
+          "Collections"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "userId"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "Video Game"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "A game played on a computer, console, or mobile device."
+                  },
+                  "wordIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "31215FSAG235G",
+                      "64HRGD53725325",
+                      "HFEF533638GDHNY"
+                    ]
+                  },
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "21215GDF25G5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Collection created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collections/{id}": {
+      "get": {
+        "summary": "Creates a new collection",
+        "tags": [
+          "Collections"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired collection"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A Collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collection"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates one collection with the apecified ID",
+        "tags": [
+          "Collections"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired collection"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "Video Game"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "A game played on a computer, console, or mobile device."
+                  },
+                  "wordIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "31215FSAG235G",
+                      "64HRGD53725325",
+                      "HFEF533638GDHNY"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Collection updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Collection"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes one collection with the apecified ID",
+        "tags": [
+          "Collections"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired collection"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection deleted successfully"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "summary": "Retrieves a list of tags",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of Tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Retrieves one tag with the apecified ID",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "userId"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "Video Game"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "A game played on a computer, console, or mobile device."
+                  },
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "21215GDF25G5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tag created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags/{id}": {
+      "get": {
+        "summary": "Creates a new tag",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired tag"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A Tag",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tag not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates one tag with the apecified ID",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired tag"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "Video Game"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "A game played on a computer, console, or mobile device."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tag"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tag not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes one tag with the apecified ID",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired tag"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag deleted successfully"
+          },
+          "404": {
+            "description": "Tag not found"
+          }
+        }
+      }
+    },
+    "/words": {
+      "get": {
+        "summary": "Retrieves a list of words",
+        "tags": [
+          "Words"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of Words",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Word"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Retrieves one word with the apecified ID",
+        "tags": [
+          "Words"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "userId"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "Video Game"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "A game played on a computer, console, or mobile device."
+                  },
+                  "tagIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "31215FSAG235G",
+                      "64HRGD53725325",
+                      "HFEF533638GDHNY"
+                    ]
+                  },
+                  "userId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "21215GDF25G5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Word created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Word"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/words/{id}": {
+      "get": {
+        "summary": "Creates a new word",
+        "tags": [
+          "Words"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired word"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A Word",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Word"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Word not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates one word with the apecified ID",
+        "tags": [
+          "Words"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired word"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "Video Game"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "A game played on a computer, console, or mobile device."
+                  },
+                  "tagIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "31215FSAG235G",
+                      "64HRGD53725325",
+                      "HFEF533638GDHNY"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Word updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Word"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Word not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes one word with the apecified ID",
+        "tags": [
+          "Words"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the desired word"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Word deleted successfully"
+          },
+          "404": {
+            "description": "Word not found"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
