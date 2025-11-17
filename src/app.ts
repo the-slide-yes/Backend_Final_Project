@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // internal imports
+import setupSwagger from "../config/swagger";
+
 import healthCheckRoutes from "./api/v1/routes/healthCheckRoutes";
 import wordRoutes from "./api/v1/routes/wordRoutes";
 import tagRoutes from "./api/v1/routes/tagRoutes";
@@ -28,6 +30,9 @@ app.use("/api/v1/tags", tagRoutes);
 app.use("/api/v1/collections", collectionRoutes);
 
 // Error handler here
+
+
+setupSwagger(app);
 
 // Export app
 export default app;
