@@ -26,7 +26,7 @@ const router: Router = express.Router();
 *                 $ref: '#/components/schemas/Collection'
 */
 router.get(
-    "/", 
+    "/",
     collectionController.getAllCollections
 );
 
@@ -52,7 +52,7 @@ router.get(
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Collection'
-*        404:
+*       404:
 *         description: Collection not found
 */
 router.get(
@@ -108,10 +108,10 @@ router.get(
 *         content:
 *           application/json:
 *             schema:
-*               $ref: '#/components/schemas/Error
+*               $ref: '#/components/schemas/Error'
 */
 router.post(
-    "/", 
+    "/",
     validateRequest(collectionSchemas.create),
     collectionController.createCollection
 );
@@ -168,7 +168,7 @@ router.post(
 *         description: Collection not found
 */
 router.put(
-    "/:id", 
+    "/:id",
     validateRequest(collectionSchemas.update),
     collectionController.updateCollection
 );
@@ -195,7 +195,7 @@ router.put(
 *         description: Collection not found
 */
 router.delete(
-    "/:id", 
+    "/:id",
     validateRequest(collectionSchemas.delete),
     collectionController.deleteCollection
 );

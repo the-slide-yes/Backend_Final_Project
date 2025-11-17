@@ -26,7 +26,7 @@ const router: Router = express.Router();
 *                 $ref: '#/components/schemas/Word'
 */
 router.get(
-    "/", 
+    "/",
     wordController.getAllWords
 );
 
@@ -52,7 +52,7 @@ router.get(
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Word'
-*        404:
+*       404:
 *         description: Word not found
 */
 router.get(
@@ -108,10 +108,10 @@ router.get(
 *         content:
 *           application/json:
 *             schema:
-*               $ref: '#/components/schemas/Error
+*               $ref: '#/components/schemas/Error'
 */
 router.post(
-    "/", 
+    "/",
     validateRequest(wordSchemas.create),
     wordController.createWord
 );
@@ -168,7 +168,7 @@ router.post(
 *         description: Word not found
 */
 router.put(
-    "/:id", 
+    "/:id",
     validateRequest(wordSchemas.update),
     wordController.updateWord
 );
@@ -195,7 +195,7 @@ router.put(
 *         description: Word not found
 */
 router.delete(
-    "/:id", 
+    "/:id",
     validateRequest(wordSchemas.delete),
     wordController.deleteWord
 );

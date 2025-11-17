@@ -1,6 +1,6 @@
 import swaggerJsdoc, { Options } from "swagger-jsdoc";
 
-const serverUrl: string = 
+const serverUrl: string =
     process.env.SWAGGER_SERVER_URL || "http://localhost:3000/api/v1";
 
 const swaggerOptions: Options = {
@@ -32,7 +32,7 @@ const swaggerOptions: Options = {
             },
         ],
     },
-    apis: ["./src/api/v1/routes/*.ts", "./src/api/v1/validations/*.ts"],
+    apis: ["./src/api/v1/routes/*.ts", "./src/api/v1/validation/*.ts"],
 };
 
 export const generateSwaggerSpec: () => Options = (): Options => {

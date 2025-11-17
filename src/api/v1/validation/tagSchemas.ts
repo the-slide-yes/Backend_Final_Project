@@ -6,7 +6,7 @@ import Joi from "joi";
  *   schemas:
  *     Tag:
  *       type: object
- *       required
+ *       required:
  *         - id
  *         - name
  *         - userId

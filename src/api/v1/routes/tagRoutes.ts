@@ -26,7 +26,7 @@ const router: Router = express.Router();
 *                 $ref: '#/components/schemas/Tag'
 */
 router.get(
-    "/", 
+    "/",
     tagController.getAllTags
 );
 
@@ -52,7 +52,7 @@ router.get(
 *           application/json:
 *             schema:
 *               $ref: '#/components/schemas/Tag'
-*        404:
+*       404:
 *         description: Tag not found
 */
 router.get(
@@ -103,10 +103,10 @@ router.get(
 *         content:
 *           application/json:
 *             schema:
-*               $ref: '#/components/schemas/Error
+*               $ref: '#/components/schemas/Error'
 */
 router.post(
-    "/", 
+    "/",
     validateRequest(tagSchemas.create),
     tagController.createTag
 );
@@ -158,7 +158,7 @@ router.post(
 *         description: Tag not found
 */
 router.put(
-    "/:id", 
+    "/:id",
     validateRequest(tagSchemas.update),
     tagController.updateTag
 );
@@ -185,7 +185,7 @@ router.put(
 *         description: Tag not found
 */
 router.delete(
-    "/:id", 
+    "/:id",
     validateRequest(tagSchemas.delete),
     tagController.deleteTag
 );
