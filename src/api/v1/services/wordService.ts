@@ -26,11 +26,11 @@ export const getAllWords = async (): Promise<Word[]> => {
             return {
                 id: doc.id,
                 ...data,
-                createdAt: data.createdAt.toDate(),
-                updatedAt: data.updatedAt.toDate(),
+                createdAt: new Date(data.createdAt),
+                updatedAt: new Date(data.updatedAt),
             } as Word;
         });
-
+ 
         return words;
     } catch (error: unknown) {
         throw error;
@@ -51,11 +51,16 @@ export const getWordById = async (id: string): Promise<Word> => {
     }
 
     const data: DocumentData | undefined = doc.data();
+
+    if(!data) {
+        throw new Error(`Word with ID ${id} missing data`);
+    }
+
     const word: Word = {
         id: doc.id,
         ...data,
-        createdAt: data?.createdAt.toDate(),
-        updatedAt: data?.updatedAt.toDate(),
+        createdAt: new Date(data.createdAt),
+        updatedAt: new Date(data.updatedAt),
     } as Word;
 
     return structuredClone(word);
