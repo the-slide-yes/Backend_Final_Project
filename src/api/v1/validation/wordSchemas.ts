@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { RequestSchema } from "../middleware/validate";
 
 /**
  * @openapi
@@ -55,7 +56,7 @@ import Joi from "joi";
  *           description: Describes who is allowed to view this word
  *           example: "private"
  */
-export const wordSchemas = {
+export const wordSchemas: Record<string, RequestSchema> = {
     create: {
         body: Joi.object({
             name: Joi.string().required().messages({

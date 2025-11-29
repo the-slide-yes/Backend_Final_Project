@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { RequestSchema } from "../middleware/validate";
 
 /**
  * @openapi
@@ -51,7 +52,7 @@ import Joi from "joi";
  *           description: Describes who is allowed to view this collection
  *           example: "private"
  */
-export const collectionSchemas = {
+export const collectionSchemas: Record<string, RequestSchema> = {
     create: {
         body: Joi.object({
             name: Joi.string().required().messages({

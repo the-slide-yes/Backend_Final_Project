@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { RequestSchema } from "../middleware/validate";
 
 /**
  * @openapi
@@ -45,7 +46,7 @@ import Joi from "joi";
  *           description: Describes who is allowed to view this tag
  *           example: "private"
  */
-export const tagSchemas = {
+export const tagSchemas: Record<string, RequestSchema> = {
     create: {
         body: Joi.object({
             name: Joi.string().required().messages({
