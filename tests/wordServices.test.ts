@@ -164,6 +164,7 @@ describe("Word Service", () => {
             expect(updatedWord.description).toBe(mockUpdatedWord.description); 
             expect(updatedWord.createdAt).toMatchObject(mockUpdatedWord.createdAt); 
             expect(updatedWord.id).toBe(mockUpdatedWord.id); 
+            expect(updatedWord.userId).toBe(mockUpdatedWord.userId); 
             expect(updatedWord.tagIds).toBe(mockUpdatedWord.tagIds);
             // There has to be a better way :(
             expect(typeof(updatedWord.updatedAt)).toBe(typeof(new Date())); 
