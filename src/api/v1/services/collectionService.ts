@@ -26,8 +26,8 @@ export const getAllCollections = async (): Promise<Collection[]> => {
             return {
                 id: doc.id,
                 ...data,
-                createdAt: data.createdAt.toDate(),
-                updatedAt: data.updatedAt.toDate(),
+                createdAt: new Date(data.createdAt),
+                updatedAt: new Date(data.updatedAt),
             } as Collection;
         });
 
@@ -54,8 +54,8 @@ export const getCollectionById = async (id: string): Promise<Collection> => {
     const collection: Collection = {
         id: doc.id,
         ...data,
-        createdAt: data?.createdAt.toDate(),
-        updatedAt: data?.updatedAt.toDate(),
+        createdAt: new Date(data?.createdAt),
+        updatedAt: new Date(data?.updatedAt),
     } as Collection;
 
     return structuredClone(collection);
