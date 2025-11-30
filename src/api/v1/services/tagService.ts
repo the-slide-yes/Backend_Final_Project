@@ -26,8 +26,8 @@ export const getAllTags = async (): Promise<Tag[]> => {
             return {
                 id: doc.id,
                 ...data,
-                createdAt: data.createdAt.toDate(),
-                updatedAt: data.updatedAt.toDate(),
+                createdAt: new Date(data.createdAt),
+                updatedAt: new Date(data.updatedAt),
             } as Tag;
         });
 
@@ -54,8 +54,8 @@ export const getTagById = async (id: string): Promise<Tag> => {
     const tag: Tag = {
         id: doc.id,
         ...data,
-        createdAt: data?.createdAt.toDate(),
-        updatedAt: data?.updatedAt.toDate(),
+        createdAt: new Date(data?.createdAt),
+        updatedAt: new Date(data?.updatedAt),
     } as Tag;
 
     return structuredClone(tag);
